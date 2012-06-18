@@ -68,3 +68,19 @@ Served asset /application.css - 304 Not Modified (2ms)
 
 Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2012-06-17 10:29:01 -0700
 Served asset /application.js - 304 Not Modified (5ms)
+
+
+Started GET "/assets/rails.png" for 127.0.0.1 at 2012-06-18 00:13:29 -0700
+Served asset /rails.png - 200 OK (10ms)
+
+
+Started GET "/movies" for 127.0.0.1 at 2012-06-18 00:13:35 -0700
+  Processing by MoviesController#index as HTML
+Completed 500 Internal Server Error in 38ms
+
+NoMethodError (undefined method `index_store_session' for #<MoviesController:0x961f040>):
+  app/controllers/movies_controller.rb:10:in `index'
+
+Rendered /usr/local/lib/ruby/gems/1.9.1/gems/actionpack-3.1.0/lib/action_dispatch/middleware/templates/rescues/_trace.erb (2.0ms)
+Rendered /usr/local/lib/ruby/gems/1.9.1/gems/actionpack-3.1.0/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (1.5ms)
+Rendered /usr/local/lib/ruby/gems/1.9.1/gems/actionpack-3.1.0/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (12.1ms)
