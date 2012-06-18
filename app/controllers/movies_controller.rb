@@ -7,14 +7,32 @@ class MoviesController < ApplicationController
   end
       
   def index
-    index_store_session params
-    if !params[:rating] && session[:rating] || !params[:order] && session[:order] || !params[:by] && session[:by]
-      redirect_to :action => :index, :ratings => session[:ratings], :order => session[:order], :by => session[:by]
+    session[:ratings] = params[:ratings] if params[:ratings]
+    session[:sort_order] = params[:sort_order] if params[:sort_order]
+    
+    if (!params[:ratings] && session[:ratings]) || (!params[:sort_order] && session[:sort_order])
+      redirect_to movies_path(ratings: session[:ratings], sort_order: session[:sort_order])
     end
-    @ratings = session[:rating]
-    @by = session[:by]
-    @order = session[:order]  
-    @movies = Movie.where(:rating => @ratings.keys).order("#{@by} #{@order if @order}")
+    
+    query_base = Movie
+    
+    if session[:ratings]
+      query_base = query_base.scoped(:conditions => { :rating => session[:ratings].keys })
+    end
+    
+    if session[:sort_order]  
+      query_base = query_base.scoped(:order => session[:sort_order])
+    end 
+    
+    @movies = query_base.all 
+    
+    @all_ratings = Movie.all_ratings
+    
+    if session[:ratings]
+      @selected_ratings = session[:ratings]
+    else
+      @selected_ratings = {}
+    end 
   end
 
   def new

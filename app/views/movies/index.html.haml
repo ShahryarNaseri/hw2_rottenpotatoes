@@ -1,19 +1,21 @@
 -#  This file is app/views/movies/index.html.haml
 %h1 All Movies
+
 = form_tag movies_path, :method => :get do
   Include:
-  = hidden_field_tag :by, @by
-  = hidden_field_tag :order, @order
-  - @all_ratings.keys.each do |rating|
+  - @all_ratings.each do |rating|
     = rating
-    = check_box_tag "ratings[#{rating}]", 1, (:checked if @ratings[rating])
-  = submit_tag "Refresh", :id => 'ratings_submit'
+    = check_box_tag "ratings[#{rating}]", value = '1', @selected_ratings[rating].present?, id: "ratings_#{rating}"
+  = submit_tag 'Refresh', id: 'ratings_submit'  
+  
 %table#movies
   %thead
     %tr
-      %th{:class => ('hilite' if @by=='title')}= link_to 'Movie Title', movies_path(:by => 'title', :order => 'asc', :rating => @ratings), :id => 'title_header'
+      - highlight_title_heading = "hilite" if !params[:sort_order].nil? and 'title' == params[:sort_order]
+      %th{class: highlight_title_heading}= link_to "Movie Title", movies_path(sort_order: :title, ratings: @selected_ratings), id: 'title_header'
       %th Rating
-      %th{:class => ('hilite' if @by=='release_date')}= link_to 'Release Date', movies_path(:by => 'release_date', :order => 'asc', :ratings => @ratings), :id => 'release_date_header'
+      - highlight_release_date_heading = "hilite" if !params[:sort_order].nil? and 'release_date' == params[:sort_order]
+      %th{class: highlight_release_date_heading}= link_to "Release Date", movies_path(sort_order: :release_date, ratings: @selected_ratings), id: 'release_date_header'
       %th More Info
   %tbody
     - @movies.each do |movie|
